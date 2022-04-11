@@ -92,5 +92,40 @@ namespace App.Classes
         {
             return Currency;
         }
+
+        public void SendMoney(string cardNumber)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void SendMoney(string lastName, string name)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void SendMoneyToAnotherCard()
+        {
+            throw new NotImplementedException();
+        }
+
+        public void TopUpTheCard(string cardNumber)
+        {
+            throw new NotImplementedException();
+        }
+
+        public string GetNumber()
+        {
+            throw new NotImplementedException();
+        }
+
+        public void ShowAllInfo()
+        {
+            throw new NotImplementedException();
+        }
+
+        public void ShowBalance(CurrencyType type)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

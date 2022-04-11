@@ -13,10 +13,12 @@ namespace App.Classes
 
     internal class VisaCard : ICard
     {
+        public IBank Bank { get; private set; }
         public string Number { get; private set; }
         public int CVV { get; private set; }
         public int Pin { get; private set; }
         public CurrencyType Currency { get; private set; }
+        public IBAN Iban { get; private set; }
         public VisaCard(CurrencyType currency, string bankID)
         {
             Currency = currency;
@@ -98,6 +100,123 @@ namespace App.Classes
         public CurrencyType GetCurrency()
         {
             return Currency;
+        }
+
+        public string GetNumber()
+        {
+            return Number;
+        }
+        public IBAN GetIban()
+        {
+            return Iban;
+        }
+
+        public void SendMoney(string cardNumber)
+        {
+            cardNumber.Trim();
+            ICard target = null;
+            Client[] clients = new Client[0];
+            Bank.GetClients().CopyTo(clients, 0);
+            for (int i = 0; i < clients.Length; i++)
+            {
+                ICard[] clientsCards = new ICard[0];
+                clients[i].Cards.CopyTo(clientsCards, 0);
+                for (int j = 0; j < clientsCards.Length; j++)
+                {
+                    if (clientsCards[j].GetNumber() == cardNumber)
+                    {
+                        target = clientsCards[j];
+                        break;
+                    }
+                }
+            }
+
+            if (target == null)
+            {
+                Console.WriteLine("Сard is not in the database");
+                Console.WriteLine("Press anykey to close");
+                Console.ReadKey();
+                return;
+            }
+
+            float money = 0;
+            Console.Write("Enter amount of money: ");
+            string str = Console.ReadLine();
+            if (float.TryParse(str, out money) == false)
+            {
+                Console.WriteLine("Incorrect input!");
+                Console.WriteLine("Press anykey to close");
+                Console.ReadKey();
+                return;
+            }
+
+            if (Iban.TransactionIsPossible(money))
+            {
+                target?.GetIban().AddMoney(money);
+                Iban.TakeOffMoney(money);
+                Console.WriteLine("Succes!");
+                Console.WriteLine("Press anykey to close");
+                Console.ReadKey();
+            }
+            else
+            {
+                Console.WriteLine("Insufficient funds");
+                Console.WriteLine("Press anykey to close");
+                Console.ReadKey();
+            } 
+        }
+
+        public void TopUpTheCard(string cardNumber)
+        {
+            cardNumber.Trim();
+            ICard target = null;
+            Client[] clients = new Client[0];
+            Bank.GetClients().CopyTo(clients, 0);
+            for (int i = 0; i < clients.Length; i++)
+            {
+                ICard[] clientsCards = new ICard[0];
+                clients[i].Cards.CopyTo(clientsCards, 0);
+                for (int j = 0; j < clientsCards.Length; j++)
+                {
+                    if (clientsCards[j].GetNumber() == cardNumber)
+                    {
+                        target = clientsCards[j];
+                        break;
+                    }
+                }
+            }
+
+            if (target == null)
+            {
+                Console.WriteLine("Сard is not in the database");
+                Console.WriteLine("Press anykey to close");
+                Console.ReadKey();
+                return;
+            }
+
+            float money = 0;
+            Console.Write("Enter amount of money: ");
+            string str = Console.ReadLine();
+            if (float.TryParse(str, out money) == false)
+            {
+                Console.WriteLine("Incorrect input!");
+                Console.WriteLine("Press anykey to close");
+                Console.ReadKey();
+                return;
+            }
+
+            target?.GetIban().AddMoney(money);
+            Console.Write("Succes!");
+        }
+
+        public void ShowAllInfo()
+        {
+            throw new NotImplementedException();
+        }
+
+        public void ShowBalance(CurrencyType type)
+        {
+            throw new NotImplementedException();
         }
     }
 }

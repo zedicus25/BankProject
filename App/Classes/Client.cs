@@ -5,7 +5,6 @@ using System.Text;
 
 namespace App.Classes
 {
-    delegate ICard CreateCard(int type);
     internal class Client
     {
         public string Name { get; set; }
@@ -13,11 +12,11 @@ namespace App.Classes
         public IBAN Iban { get; set; }
         public ICard[] Cards { get; set; }
 
-        private CreateCard[] _createCards;
+        private Func<int, ICard>[] _createCards;
         public Client()
         {
             Cards = new ICard[0];
-            _createCards = new CreateCard[]
+            _createCards = new Func<int, ICard>[]
             {
                 CreateVisa,
                 CreateMasterCard
