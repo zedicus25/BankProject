@@ -1,12 +1,13 @@
 ﻿using System;
-
+using App.Classes;
 namespace App
 {
     internal class Program
     {
         static void Main(string[] args)
         {
-            Console.WriteLine("Hello World!");
+            Client client = new Client();
+            client.AddCard();
         }
     }
 }
