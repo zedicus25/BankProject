@@ -12,13 +12,15 @@ namespace App.Classes
         public string LastName { get; set; }
         public IBAN Iban { get; set; }
         public ICard[] Cards { get; set; }
+
         private CreateCard[] _createCards;
         public Client()
         {
             Cards = new ICard[0];
             _createCards = new CreateCard[]
             {
-                CreateVisa
+                CreateVisa,
+                CreateMasterCard
             };
         }
         public void AddCard()
@@ -30,14 +32,17 @@ namespace App.Classes
             Cards.CopyTo(tmp, 0);
             Cards = new ICard[tmp.Length+1];
             tmp.CopyTo(Cards, 0);
-            Cards[Cards.Length-1] = _createCards[currency - 1]?.Invoke(currency);
+            Cards[Cards.Length-1] = _createCards[currency - 1]?.Invoke(currency-1);
         }
 
         private ICard CreateVisa(int type)
         {
-            return new VisaCard(0);
+            return new VisaCard((CurrencyType)type, "20018");
         }
-
+        private ICard CreateMasterCard(int type)
+        {
+            return new MasterCard((CurrencyType)type, "51512");
+        }
         private int SelectCardType()
         {
             int cardType = 0;
@@ -57,7 +62,6 @@ namespace App.Classes
                 Console.Clear();
             }
         }
-
         private int SelectCurrencyType()
         {
             int currency = 0;

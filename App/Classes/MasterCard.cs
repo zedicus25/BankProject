@@ -4,20 +4,13 @@ using System.Text;
 
 namespace App.Classes
 {
-    public enum CurrencyType
-    {
-        USD,
-        EUR,
-        GRN
-    };
-
-    internal class VisaCard : ICard
+    internal class MasterCard : ICard
     {
         public string Number { get; private set; }
         public int CVV { get; private set; }
         public int Pin { get; private set; }
         public CurrencyType Currency { get; private set; }
-        public VisaCard(CurrencyType currency, string bankID)
+        public MasterCard(CurrencyType currency, string bankID)
         {
             Currency = currency;
             Number = GenerateNumber(bankID);
@@ -63,7 +56,7 @@ namespace App.Classes
                     Pin = newPin;
                     Console.WriteLine($"New pin is {Pin} Remeber it!");
                     break;
-                } 
+                }
                 Console.Clear();
             }
 
@@ -72,7 +65,7 @@ namespace App.Classes
         public int GenerateCVV()
         {
             Random r = new Random();
-            return r.Next(100,999);
+            return r.Next(100, 999);
         }
 
         public string GenerateNumber(string bankID)

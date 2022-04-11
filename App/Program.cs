@@ -8,6 +8,7 @@ namespace App
         {
             Client client = new Client();
             client.AddCard();
+            client.AddCard();
         }
     }
 }

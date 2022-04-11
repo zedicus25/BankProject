@@ -1,4 +1,6 @@
-﻿namespace App.Interfaces
+﻿using App.Classes;
+
+namespace App.Interfaces
 {
     internal interface ICard
     {
@@ -6,5 +8,6 @@
         int GenerateCVV();
         int GeneratePin();
         void ChangePin();
+        CurrencyType GetCurrency();
     }
 }
