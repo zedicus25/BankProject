@@ -9,77 +9,29 @@ namespace App.Classes
     {
         public string Name { get; set; }
         public string LastName { get; set; }
-        public IBAN Iban { get; set; }
+        public IBAN Iban { get; private set; }
         public ICard[] Cards { get; set; }
 
-        private Func<int, ICard>[] _createCards;
-        public Client()
+        public Client(string name, string lastName, string bankID)
         {
+            Iban = new IBAN(bankID);
+            Name = "Jonh";
+            LastName = "Brush";
             Cards = new ICard[0];
-            _createCards = new Func<int, ICard>[]
-            {
-                CreateVisa,
-                CreateMasterCard
-            };
         }
-        public void AddCard()
+        public void AddCard(Manager manager)
         {
-            int cardType = SelectCardType();
-            int currency = SelectCurrencyType();
-            
-            ICard[] tmp = new ICard[Cards.Length];
-            Cards.CopyTo(tmp, 0);
-            Cards = new ICard[tmp.Length+1];
-            tmp.CopyTo(Cards, 0);
-            Cards[Cards.Length-1] = _createCards[currency - 1]?.Invoke(currency-1);
+            manager.CreateNewCard(this);
         }
 
-        private ICard CreateVisa(int type)
+        public void SendMoney()
         {
-            return new VisaCard((CurrencyType)type, "20018");
+            Cards[0].SendMoney(Cards[1].GetNumber());
         }
-        private ICard CreateMasterCard(int type)
+
+        public void TopUpTheCard()
         {
-            return new MasterCard((CurrencyType)type, "51512");
-        }
-        private int SelectCardType()
-        {
-            int cardType = 0;
-            while (true)
-            {
-                Console.WriteLine("Select type of card:");
-                Console.WriteLine("1-Visa");
-                Console.WriteLine("2-MasterCard");
-                string str = Console.ReadLine();
-                if (int.TryParse(str, out cardType))
-                    if (cardType > 0 && cardType <= 2)
-                        return cardType;
-                    else
-                        Console.WriteLine("No such type!");
-                else
-                    Console.WriteLine("Incorect input!");
-                Console.Clear();
-            }
-        }
-        private int SelectCurrencyType()
-        {
-            int currency = 0;
-            while (true)
-            {
-                Console.WriteLine("Select currency:");
-                Console.WriteLine("1-USD");
-                Console.WriteLine("2-EUR");
-                Console.WriteLine("3-GRN");
-                string str = Console.ReadLine();
-                if (int.TryParse(str, out currency))
-                    if (currency > 0 && currency <= 3)
-                        return currency;
-                    else
-                        Console.WriteLine("No such type!");
-                else
-                    Console.WriteLine("Incorect input!");
-                Console.Clear();
-            }
+            Cards[0].TopUpTheCard(Cards[0].GetNumber());
         }
     }
 }

@@ -13,8 +13,8 @@ namespace App.Interfaces
         IBAN GetIban();
         void SendMoney(string cardNumber);
         void TopUpTheCard(string cardNumber);
-        void ShowAllInfo();
-        void ShowBalance(CurrencyType type);
+        string ShowAllInfo();
+        string ShowBalance();
 
     }
 }

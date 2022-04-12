@@ -19,10 +19,13 @@ namespace App.Classes
         public int Pin { get; private set; }
         public CurrencyType Currency { get; private set; }
         public IBAN Iban { get; private set; }
-        public VisaCard(CurrencyType currency, string bankID)
+
+        public VisaCard(CurrencyType currency, IBAN iban, IBank bank)
         {
+            Bank = bank;
+            Iban = iban;
             Currency = currency;
-            Number = GenerateNumber(bankID);
+            Number = GenerateNumber(bank.GetID());
             CVV = GenerateCVV();
             Pin = GeneratePin();
         }
@@ -69,32 +72,6 @@ namespace App.Classes
                 Console.Clear();
             }
 
-        }
-
-        public int GenerateCVV()
-        {
-            Random r = new Random();
-            return r.Next(100,999);
-        }
-
-        public string GenerateNumber(string bankID)
-        {
-            StringBuilder sb = new StringBuilder();
-            Random random = new Random();
-            sb.Append("4");
-            sb.Append(bankID);
-            for (int i = 0; i < 10; i++)
-            {
-                int num = random.Next(10000, 99999);
-                sb.Append(num % 10);
-            }
-            return sb.ToString();
-        }
-
-        public int GeneratePin()
-        {
-            Random r = new Random();
-            return r.Next(1000, 9999);
         }
 
         public CurrencyType GetCurrency()
@@ -170,11 +147,11 @@ namespace App.Classes
         {
             cardNumber.Trim();
             ICard target = null;
-            Client[] clients = new Client[0];
+            Client[] clients = new Client[Bank.GetClients().Length];
             Bank.GetClients().CopyTo(clients, 0);
             for (int i = 0; i < clients.Length; i++)
             {
-                ICard[] clientsCards = new ICard[0];
+                ICard[] clientsCards = new ICard[clients[i].Cards.Length];
                 clients[i].Cards.CopyTo(clientsCards, 0);
                 for (int j = 0; j < clientsCards.Length; j++)
                 {
@@ -209,14 +186,45 @@ namespace App.Classes
             Console.Write("Succes!");
         }
 
-        public void ShowAllInfo()
+        public string ShowAllInfo()
         {
-            throw new NotImplementedException();
+            StringBuilder sb = new StringBuilder();
+            sb.AppendLine("Card number " + Number);
+            sb.AppendLine("Card CVV " + CVV);
+            sb.AppendLine("Card PIN " + Pin);
+            sb.AppendLine("Card balance " + Iban.Balance + " " + Currency);
+            return sb.ToString();
         }
 
-        public void ShowBalance(CurrencyType type)
+        public string ShowBalance()
         {
-            throw new NotImplementedException();
+            return String.Format("Balance {0} {1}", Iban.Balance, Currency);
+        }
+
+        public int GenerateCVV()
+        {
+            Random r = new Random();
+            return r.Next(100, 999);
+        }
+
+        public string GenerateNumber(string bankID)
+        {
+            StringBuilder sb = new StringBuilder();
+            Random random = new Random();
+            sb.Append("4");
+            sb.Append(bankID);
+            for (int i = 0; i < 10; i++)
+            {
+                int num = random.Next(10000, 99999);
+                sb.Append(num % 10);
+            }
+            return sb.ToString();
+        }
+
+        public int GeneratePin()
+        {
+            Random r = new Random();
+            return r.Next(1000, 9999);
         }
     }
 }
