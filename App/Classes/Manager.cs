@@ -33,7 +33,7 @@ namespace App.Classes
         }
         public void CreateNewCard(Client client)
         {
-            ICard[] cards = new ICard[0]; 
+            ICard[] cards = new ICard[client.Cards.Length]; 
             client.Cards.CopyTo(cards, 0);
             Array.Resize(ref cards, cards.Length+1);
             int type = SelectCardType();

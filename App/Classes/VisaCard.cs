@@ -92,11 +92,11 @@ namespace App.Classes
         {
             cardNumber.Trim();
             ICard target = null;
-            Client[] clients = new Client[0];
+            Client[] clients = new Client[Bank.GetClients().Length];
             Bank.GetClients().CopyTo(clients, 0);
             for (int i = 0; i < clients.Length; i++)
             {
-                ICard[] clientsCards = new ICard[0];
+                ICard[] clientsCards = new ICard[clients[i].Cards.Length];
                 clients[i].Cards.CopyTo(clientsCards, 0);
                 for (int j = 0; j < clientsCards.Length; j++)
                 {
@@ -225,6 +225,11 @@ namespace App.Classes
         {
             Random r = new Random();
             return r.Next(1000, 9999);
+        }
+
+        public override string ToString()
+        {
+            return String.Format("Visa {0}", Number);
         }
     }
 }

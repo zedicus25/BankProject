@@ -219,5 +219,9 @@ namespace App.Classes
             Random r = new Random();
             return r.Next(1000, 9999);
         }
+        public override string ToString()
+        {
+            return String.Format("MasterCard {0}", Number);
+        }
     }
 }
