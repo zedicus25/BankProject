@@ -1,4 +1,5 @@
 ﻿using App.Classes;
+using System;
 
 namespace App.Interfaces
 {
@@ -15,6 +16,7 @@ namespace App.Interfaces
         void TopUpTheCard(string cardNumber);
         string ShowAllInfo();
         string ShowBalance();
+        Action<string> GetAction(int ind);
 
     }
 }

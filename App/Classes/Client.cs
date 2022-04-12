@@ -49,7 +49,7 @@ namespace App.Classes
                 Console.WriteLine("Press any key to exit");
                 return;
             }
-            Cards[card - 1].SendMoney(number);
+            Cards[card - 1].GetAction(0)?.Invoke(number);
         }
 
         public void TopUpTheCard()
@@ -69,8 +69,7 @@ namespace App.Classes
                 Console.WriteLine("Press any key to exit");
                 return;
             }
-
-            Cards[card-1].TopUpTheCard(Cards[card-1].GetNumber());
+            Cards[card - 1].GetAction(1)?.Invoke(Cards[card - 1].GetNumber());
         }
     }
 }

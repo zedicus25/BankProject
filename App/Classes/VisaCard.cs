@@ -19,9 +19,15 @@ namespace App.Classes
         public int Pin { get; private set; }
         public CurrencyType Currency { get; private set; }
         public IBAN Iban { get; private set; }
+        private Action<string>[] _actions;
 
         public VisaCard(CurrencyType currency, IBAN iban, IBank bank)
         {
+            _actions = new Action<string>[]
+            {
+                SendMoney,
+                TopUpTheCard
+            };
             Bank = bank;
             Iban = iban;
             Currency = currency;
@@ -86,6 +92,12 @@ namespace App.Classes
         public IBAN GetIban()
         {
             return Iban;
+        }
+        public Action<string> GetAction(int ind)
+        {
+            if(ind >= 0 && ind < _actions.Length)
+                return _actions[ind];
+            return null;
         }
 
         public void SendMoney(string cardNumber)
